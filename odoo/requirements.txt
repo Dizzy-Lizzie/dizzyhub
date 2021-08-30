@@ -1,0 +1,7 @@
+odoo14-addon-disable-odoo-online==14.0.1.0.1.dev2
+odoo14-addon-product-code-unique==14.0.1.0.1.dev6
+odoo14-addon-remove-odoo-enterprise==14.0.1.0.1.dev4
+odoo14-addon-sentry==14.0.1.0.1
+odoo14-addon-product-variant-default-code==14.0.1.1.4
+odoo14-addon-website-odoo-debranding==14.0.1.0.1.dev2
+aio-pika==6.8.0

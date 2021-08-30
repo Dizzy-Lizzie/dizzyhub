@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - POSTGRES_DB=odoo
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+
+  odoo:
+    build: 
+      context: ./odoo
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    environment:
+      - DATABASE_URL=postgresql://odoo:odoo@db:5432/odoo
+    restart:  unless-stopped

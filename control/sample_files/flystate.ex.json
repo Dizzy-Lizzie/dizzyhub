@@ -1,0 +1,17 @@
+{
+    "schemaVersion": 0.1,
+    "apps" : {
+        "postgress": {
+            "name": "dizzy-pg",
+            "instanceName": "dizzyhub-pg",
+            "secrets": {
+                "POSTGRES_PASSWORD": {}
+            },
+            "autoscale": "Balanced"
+        }
+    },
+    "auth": {
+        "token": ""
+    },
+    "environment": "evan-dev"
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Odoo",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "../docker-compose.devcontainer.yml"
+    ],
+    "service": "odoo",
+    "extensions": [],
+    // Open the sub-folder with the source code
+    "workspaceFolder": "/workspace/odoo"
+  }

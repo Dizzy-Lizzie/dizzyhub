@@ -1,0 +1,19 @@
+version: '3'
+services:
+  odoo:
+    build:
+        args:
+            host_uid: 1000
+            host_gid: 1000
+        target: local
+    volumes:
+        - .:/workspace:cached
+        - projectname-bashhistory:/commandhistory
+        - vs-code-extensions:/odoo/.vscode-server/extensions
+        - odoo-lib:/var/lib/odoo
+    command: sleep infinity
+
+volumes:
+    projectname-bashhistory:
+    vs-code-extensions:
+    odoo-lib:

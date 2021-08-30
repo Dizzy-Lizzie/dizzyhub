@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data>
+    <record id="sales_team_shopify" model="crm.team">
+        <field name="name">Shopify</field>
+        <field name="active" eval="True"/>
+    </record>
+</data></odoo>

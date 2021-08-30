@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="garment_color_attribute" model="product.attribute">
+        <field name="name">Color</field>
+        <field name="create_variant">always</field>
+        <field name="display_type">radio</field>
+    </record>
+
+    <record id="garment_size_attribute" model="product.attribute">
+        <field name="name">Size</field>
+        <field name="create_variant">always</field>
+        <field name="display_type">radio</field>
+    </record>
+</odoo>

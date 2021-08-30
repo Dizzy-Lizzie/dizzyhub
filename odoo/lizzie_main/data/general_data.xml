@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data noupdate="0">
+
+    <!-- allow this data to be updated on module update instead of only install -->
+    <function name="write" model="ir.model.data">
+        <function name="search" model="ir.model.data">
+            <value eval="[('module', '=', 'base')]"/>
+        </function>
+        <value eval="{'noupdate': False}"/>
+    </function>
+
+    <!-- We don't want users to edit this, set it here -->
+    <record id="base.main_company" model="res.company">
+        <field name="name">Dizzy Lizzie</field>
+        <field name="street">1324 Lexington Ave</field>
+        <field name="city">New York</field>
+        <field name="state_id" ref="base.state_us_27"/>
+        <field name="zip">10128</field>
+        <field name="country_id" ref="base.us"/>
+        <field name="phone">917-566-2607</field>
+        <field name="email">lizzy@dizzy-lizzie.com</field>
+        <field name="logo" type="base64" file="lizzie_main/static/img/logo.png"/>
+        <field name="website">https://dizzy-lizzie.com</field>
+        <field name="partner_id" ref="base.main_partner"/>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+    <record id="tax_group_0" model="account.tax.group">
+        <field name="name">Tax 0%</field>
+    </record>
+    <record id="account_tax_zero" model="account.tax">
+        <!-- <field name="chart_template_id" ref="configurable_chart_template"/> -->
+        <field name="name">Tax 0%</field>
+        <field name="amount">0</field>
+        <field name="type_tax_use">sale</field>
+        <field name="tax_group_id" ref="tax_group_0"/>
+    </record>
+
+    <!-- stock module -->
+    <record id="res_warehouse_company_wit" model="res.partner">
+        <field name="name">WIT Logistics</field>
+        <field name="is_company">1</field>
+        <field eval="1" name="active"/>
+        <field name="street">15 Campus Drive</field>
+        <field model="res.country" name="country_id" search="[('code','ilike','us')]"/>
+        <field model="res.country.state" name="state_id" search="[('code','ilike','nj')]"/>
+        <field name="zip">08016</field>
+        <field name="city">Burlington</field>
+        <field name="email">BMishaan@witlogistics.com</field>
+        <field name="phone">(609)-793-5757</field>
+        <field name="website">https://www.walkerscm.com/solutions/logistics/</field>
+    </record>
+    <record id="stock.warehouse0" model="stock.warehouse">
+        <field name="partner_id" ref="res_warehouse_company_wit"/>
+        <field name="name">WIT Logistics Burlington</field>
+        <field name="code">WITB</field>
+    </record>
+
+
+   <!-- in the product module set the weight uom to pounds -->
+    <record model="ir.config_parameter" id="product_weight_in_lbs">
+        <field name="key">product.weight_in_lbs</field>
+        <field name="value">1</field>
+    </record>
+    <!-- in the product module set the volume uom to cubic feet -->
+    <record model="ir.config_parameter" id="product_volume_in_cubic_feet">
+        <field name="key">product.volume_in_cubic_feet</field>
+        <field name="value">1</field>
+    </record>
+    
+    <!-- 
+        close portal account signups to invite only. 
+
+        The auth_signup module has it's xml data files set to 
+        noupdate="1" so you must install this module for changes
+        to take effect if this is updated, updating the module has 
+        no effect. Uncomment the snippet bellow to permanently change
+        the module to noupdate="0"
+    -->
+    <!-- <function name="write" model="ir.model.data">
+        <function name="search" model="ir.model.data">
+            <value eval="[('module', '=', 'auth_signup')]"/>
+        </function>
+        <value eval="{'noupdate': False}"/>
+    </function> -->
+    <function model="ir.config_parameter" name="set_param" eval="('auth_signup.invitation_scope', 'b2b')"/>
+    <!-- Turn on product variants by adding the product_variant group to the base group -->
+    <record id="base.group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('product.group_product_variant'))]"/>
+    </record>
+    <!-- Activate price lists -->
+    <record id="base.group_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('product.group_product_pricelist'))]"/>
+    </record>
+    <!-- Set pricelists to allow pricing rules -->
+    <function model="ir.config_parameter" name="set_param" eval="('product.product_pricelist_setting', 'advanced')"/>
+
+</data></odoo>

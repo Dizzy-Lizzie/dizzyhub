@@ -1,0 +1,16 @@
+{
+    'name': 'Change Data Capture',
+    'version': '0.1',
+    'summary': 'Broadcast CDC events to a message broker',
+    'sequence': 10,
+    'description': """Change Data Capture""",
+    'category': 'Tools',
+    'website': 'https://github.com/etherealite',
+    'depends': [],
+    'data': [],
+    'demo': [],
+    'qweb': [],
+    'installable': True,
+    'application': False,
+    'auto_install': False,
+}

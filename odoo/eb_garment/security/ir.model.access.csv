@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_garment_template_public,garment.template public,model_garment_template,,1,1,1,1
+access_garment_pattern_public,garment.pattern public,model_garment_pattern,,1,1,1,1
+access_garment_collection_public,garment.collection public,model_garment_collection,,1,1,1,1
+access_garment_season_public,garment.season public,model_garment_season,,1,1,1,1
+access_garment_size_range_public,garment.size.range public,model_garment_size_range,,1,1,1,1
+access_garment_color_public,garment.color public,model_garment_color,,1,1,1,1
+accces_garment_size_range_template,garment.size.range.template public,model_garment_size_range_template,,1,1,1,1
+access_garment_size,garment.size public,model_garment_size,,1,1,1,1
+access_garment_size_code,garment.size.code public,model_garment_size_code,,1,1,1,1

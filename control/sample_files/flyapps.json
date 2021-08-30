@@ -1,0 +1,18 @@
+{
+    "schemaVersion": 0.1,
+    "apps" : {
+        "odoo2": {
+            "volumes": {
+                "odoo_data": { "size": 10 }
+            },
+            "autoscale": "disabled",
+            "region": "ewr",
+            "secrets": {
+                "POSTGRES_PASSWORD": {
+                    "description": "postresql super user password"
+                }
+            },
+            "deploy": { "strategy": "immediate"}
+        }
+    }
+}

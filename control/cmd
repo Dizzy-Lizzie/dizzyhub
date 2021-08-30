@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+import os
+
+from inspect import getsourcefile
+
+from control.control import cli
+
+os.environ['FLY_ACCESS_TOKEN'] = 'B1LZN8hSqaQU9rY06ufNoCKDOiGph6SN7_x2pNNKOwY'
+
+
+cli.run(os.path.abspath(
+    os.path.dirname(getsourcefile(lambda:0))
+))

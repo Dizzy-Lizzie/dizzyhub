@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data noupdate="0">
+    <!-- Portal : partner and user -->
+    <record id="dev_partner_portal" model="res.partner">
+        <field name="name">Joel Willis</field>
+        <field name="email">joel.willis63@example.com</field>
+        <field name="street">858 Lynn Street</field>
+        <field name="city">Bayonne</field>
+        <field model="res.country.state" name="state_id" search="[('code','ilike','NJ')]"/>
+        <field name="zip">07002</field>
+        <field name="country_id" ref="base.us"/>
+        <field name="company_name">YourCompany</field>
+        <field name="image_1920" type="base64" file="base/static/img/partner_demo_portal.jpg"/>
+        <field name="phone">(683)-556-5104</field>
+    </record>
+    <record id="dev_portal_user" model="res.users" context="{'no_reset_password': True}">
+        <field name="partner_id" ref="dev_partner_portal"/>
+        <field name="login">portal</field>
+        <field name="password">portal</field>
+        <field name="signature"><![CDATA[<span>-- <br/>Mr Demo Portal</span>]]></field>
+        <field name="groups_id" eval="[(5,)]"/><!-- Avoid auto-including this user in any default group -->
+    </record>
+
+    <record id="base.group_portal" model="res.groups"><!-- Add the demo user to the portal (and therefore to the portal member group) -->
+        <field name="users" eval="[(4,ref('dev_portal_user'))]"/>
+    </record>
+</data></odoo>

@@ -1,0 +1,143 @@
+#!/bin/bash
+
+if [ -r /workspace/odoo/parse_db_url.sh ]; then
+    source /workspace/odoo/parse_db_url.sh
+else
+    source /usr/local/lib/parse_db_url.sh
+fi
+
+set_db_args() {
+
+    for p in "${!parse_db_ctx_parts[@]}"; do
+        local value="${parse_db_ctx_parts[$p]}"
+        if [ "$value" ]; then
+            case "$p" in
+                host)
+                    db_args+=("--db_host" "$value")
+                    args_mapping["--db_host"]="$value"
+                    ;;
+                port)
+                    db_args+=("--db_port" "$value")
+                    args_mapping["--db_port"]="$value"
+                    ;;
+                username)
+                    db_args+=("--db_user" "$value")
+                    args_mapping["--db_user"]="$value"
+                    ;;
+                password)
+                    db_args+=("--db_password" "$value")
+                    args_mapping["--db_password"]="$value"
+                    ;;
+                path)
+                    db_args+=("--database" "$value")
+                    args_mapping["--database"]="$value"
+                    ;;
+            esac
+        fi
+    done
+}
+
+
+if [ ${DATABASE_URL} ]; then
+    declare -a db_args
+    declare -A args_mapping
+    parse_db "${DATABASE_URL}" "set_db_args"
+fi
+
+modules=(
+    "lizzie_main"
+)
+
+
+
+
+install_modules() {
+
+    if [ $# -gt 0 ]; then
+        modules=$(IFS=','; echo "$*")
+    fi
+
+    odoo \
+        --stop-after-init \
+        --no-http \
+        -i  "$modules" \
+        "${db_args[@]}"
+}
+
+upgrade_modules() {
+   odoo \
+        --stop-after-init \
+        --no-http \
+        -u  "$modules" \
+        "${db_args[@]}"
+}
+
+
+create_database() {
+    odoo \
+        -i base \
+        --no-http \
+        --without-demo \
+        --stop-after-init "${db_args[@]}"
+}
+
+delete_database() {
+    local db_name="${args_mapping["--database"]}"
+    local host="${args_mapping["--db_host"]}"
+    local user="${args_mapping["--db_user"]}"
+    local password="${args_mapping["--db_password"]}"
+
+    if [ ! "$db_name" ]; then
+        2&>1 echo "no database name given"
+        exit 1
+    fi
+
+    export PGPASSWORD="$password"
+    dropdb -w --host="$host" --username="$user" "$db_name"
+
+    # Clear out file attachments and cache files
+    if [ -d "/var/lib/odoo/filestore/$db_name" ]; then
+        rm -rf "/var/lib/odoo/filestore/$db_name"
+    fi
+    # Delete the session files
+    if [ "$(ls -A /var/lib/odoo/sessions)" ]; then
+        rm "/var/lib/odoo/sessions/"*
+    fi
+}
+
+help() {
+    echo "
+    commands:
+        install_modules
+        upgrade_modules
+        create_database
+    "
+}
+
+
+if [ ! "$1" ]; then
+    2>&1 echo "requires subcommand"
+    help
+    exit 1
+fi
+
+case "$1" in
+    install_modules)
+        shift
+        install_modules "$@"
+        ;;
+    create_database)
+        create_database
+        ;;
+    delete_database)
+        delete_database
+        ;;
+    upgrade_modules)
+        upgrade_modules
+        ;;
+    *)
+        2>&1 echo "Unknown command: $1"
+        help
+        exit 1
+        ;;
+esac

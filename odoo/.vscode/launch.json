@@ -1,0 +1,59 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Odoo",
+            "type": "python",
+            "request": "launch",
+            "program": "/usr/bin/odoo",
+            "args": [
+                "--dev", "xml",
+                "-i", "eb_garment"
+            ],
+            "console": "internalConsole",
+            "justMyCode": false,
+            "redirectOutput": true,
+        },
+        {
+            "name": "Odoo Monkeyed",
+            "type": "python",
+            "request": "launch",
+            "program": "/workspace/odoo/debug_server.py",
+            "args": [
+                "--dev", "reload, xml, werkzeug"
+            ],
+            "console": "internalConsole",
+            "justMyCode": false,
+            "redirectOutput": true,
+        },
+        {
+            "name": "pytest test eb_garment",
+            "type": "python",
+            "request": "launch",
+            "program": "/usr/local/bin/pytest",
+            "args": [
+            ],
+            "console": "internalConsole",
+            "justMyCode": false,
+            "redirectOutput": true,
+        },
+        {
+            "name": "Odoo test eb_garment",
+            "type": "python",
+            "request": "launch",
+            "program": "/usr/bin/odoo",
+            "args": [
+                "--no-http",
+                "--test-enable",
+                "--stop-after-init",
+                "-i", "eb_garment",
+            ],
+            "console": "internalConsole",
+            "justMyCode": false,
+            "redirectOutput": true,
+        },
+    ]
+}
