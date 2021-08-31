@@ -8,6 +8,9 @@ services:
         target: local
     volumes:
         - .:/workspace:cached
+        - ./odoo/parse_db_url.sh:/usr/local/lib/parse_db_url.sh
+        - ./odoo/entrypoint.sh/:/entrypoint.sh
+        - ./odoo/odoo_cmds:/usr/local/bin/odoo_cmds
         - projectname-bashhistory:/commandhistory
         - vs-code-extensions:/odoo/.vscode-server/extensions
         - odoo-lib:/var/lib/odoo
