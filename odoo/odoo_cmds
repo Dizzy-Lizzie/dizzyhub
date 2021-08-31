@@ -37,6 +37,15 @@ set_db_args() {
     done
 }
 
+if [ -z "$ENV" ]; then
+    echo "\$ENV not defined, assuming production"
+    ENV="production"
+fi
+
+if [[ $EUID -eq 0 ]]; then
+    echo "Cannot be run as root user"
+    exit 1
+fi
 
 if [ ${DATABASE_URL} ]; then
     declare -a db_args
@@ -48,7 +57,7 @@ modules=(
     "lizzie_main"
 )
 
-
+addons_path="$ODOO_ADDONS_PATH"
 
 
 install_modules() {
@@ -60,9 +69,11 @@ install_modules() {
     odoo \
         --stop-after-init \
         --no-http \
+        --addons-path "$addons_path" \
         -i  "$modules" \
         "${db_args[@]}"
 }
+
 
 upgrade_modules() {
    odoo \
@@ -76,20 +87,28 @@ upgrade_modules() {
 create_database() {
     odoo \
         -i base \
+        --addons-path "$addons_path" \
         --no-http \
-        --without-demo \
+        --without-demo=1 \
         --stop-after-init "${db_args[@]}"
+
+    install_modules
 }
 
 delete_database() {
+    if [[ "$ENV" == "production" ]]; then
+        echo "can't delete production database"
+        return 1
+    fi
+
     local db_name="${args_mapping["--database"]}"
     local host="${args_mapping["--db_host"]}"
     local user="${args_mapping["--db_user"]}"
     local password="${args_mapping["--db_password"]}"
 
     if [ ! "$db_name" ]; then
-        2&>1 echo "no database name given"
-        exit 1
+        echo "no database name found"
+        return 1
     fi
 
     export PGPASSWORD="$password"
@@ -105,12 +124,21 @@ delete_database() {
     fi
 }
 
+
+serve() {
+    odoo \
+        --no-database-list "${db_args[@]}" \
+        --addons-path "$addons_path"
+}
+
+
 help() {
     echo "
     commands:
         install_modules
         upgrade_modules
         create_database
+        serve
     "
 }
 
@@ -118,7 +146,7 @@ help() {
 if [ ! "$1" ]; then
     2>&1 echo "requires subcommand"
     help
-    exit 1
+    return 1
 fi
 
 case "$1" in
@@ -135,9 +163,12 @@ case "$1" in
     upgrade_modules)
         upgrade_modules
         ;;
-    *)
-        2>&1 echo "Unknown command: $1"
-        help
-        exit 1
+    serve)
+        serve
         ;;
+    *)
+        #2>&1 echo "Unknown command: $1"
+        # help
+        # exit 1
+        # ;;
 esac

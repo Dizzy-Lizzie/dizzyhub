@@ -234,12 +234,15 @@
     parent="garment_menu_root" action="garment_color_action"
     sequence="300"
 />
-<menuitem id="garment_sizing_unit_menu" name="Size Ranges"
-    parent="garment_menu_root" action="garment_size_range_template_action"
-    sequence="400"
-/>
 <menuitem id="garment_collection_menu" name="Collections"
     parent="garment_menu_root" action="garment_collection_action"
-    sequence="500"
+    sequence="400"
+/>
+<menuitem id="garment_configuration_menu" name="Configuration"
+    parent="garment_menu_root" sequence="500"
+/>
+<menuitem id="garment_sizing_unit_menu" name="Size Ranges"
+    parent="garment_configuration_menu" action="garment_size_range_template_action"
+    sequence="100"
 />
 </odoo>

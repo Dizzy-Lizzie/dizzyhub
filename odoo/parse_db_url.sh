@@ -93,7 +93,20 @@ parse_db() {
     )
 
 
-    if [ "${cmd}" ]; then
+    if [[ "${cmd}" == "export" ]]; then
+        export URL_AUTHORITY="$authority"
+        export URL_USERINFO="$userinfo"
+        export URL_HOSTINFO="$hostinfo"
+        export URL_HOST="$host"
+        export URL_PORT="$port"
+        export URL_USERNAME="$username"
+        export URL_PASSWORD="$password"
+        export URL_PATH="$path"
+        export URL_QUERY="$query"
+        export URL_PARAM_NAMES="${params[@]}"
+        export URL_PARAM_VALUES="${!params[@]}"
+
+    elif [[ "$(type -t $cmd)" == "function" ]]; then
         local parse_db_ctx_parts
         declare -A parse_db_ctx_parts
 
@@ -102,7 +115,7 @@ parse_db() {
         done
 
         $cmd
-    else
+    elif [[ "${cmd}" == "echo" ]]; then
         echo "\$authority=$authority"
         echo "\$userinfo=$userinfo"
         echo "\$hostinfo=$hostinfo"
@@ -114,5 +127,18 @@ parse_db() {
         echo "\$query=$query"
         echo "\$param_names=${params[@]}"
         echo "\$param_values=${!params[@]}"
+    else
+        URL_AUTHORITY="$authority"
+        URL_USERINFO="$userinfo"
+        URL_HOSTINFO="$hostinfo"
+        URL_HOST="$host"
+        URL_PORT="$port"
+        URL_USERNAME="$username"
+        URL_PASSWORD="$password"
+        URL_PATH="$path"
+        URL_QUERY="$query"
+        URL_PARAMS=$params
+        URL_PARAM_NAMES="${params[@]}"
+        URL_PARAM_VALUES="${!params[@]}"
     fi
 }
